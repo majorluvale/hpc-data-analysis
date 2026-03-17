@@ -1,7 +1,4 @@
-# Use of Python to pull data from OCHA HPC API
-In this project I will be pulling data from the OCHA HPC API and analyze it using pandas, and graphs using seaborn.
-
-HPC Plan Data Extraction
+#HPC Plan Data Extraction
 Overview
 
 This project provides a simple way to extract Humanitarian Programme Cycle (HPC) plan data using a Python function. It allows users to retrieve structured plan-level information for a given year and global cluster.
@@ -18,21 +15,14 @@ A Jupyter notebook used to test the function and explore the returned data.
 
 Requirements
 
-Make sure you have the following installed:
+Install dependencies using:
 
-Python 3.x
+pip install -r requirements.txt
 
-pandas
+Or manually:
 
-requests (if used inside your function)
-
-You can install dependencies with:
-
-pip install pandas requests
+pip install requests numpy pandas openpyxl matplotlib seaborn plotly nbformat>=4.2.0
 Usage
-
-Import the function and call it with the desired parameters:
-
 from hpc_data import getPlanData
 
 PLAN_YEAR = 2025
@@ -42,20 +32,34 @@ df = getPlanData(PLAN_YEAR, GLOBAL_CLUSTER_ID)
 df.head()
 Parameters
 
-PLAN_YEAR
-The year of the HPC plan (e.g., 2025)
+PLAN_YEAR: Year of the HPC plan (e.g., 2025)
 
-GLOBAL_CLUSTER_ID
-The global cluster identifier
-Example:
+GLOBAL_CLUSTER_ID: Global cluster identifier (see table below)
 
-13 → GBV
-
-14 → Housing, Land and Property (HLP)
-
-Cluster IDs can be retrieved from:
-https://api.hpc.tools/v1/public/global-cluster
-
+Global Cluster IDs
+Global Cluster Id	Name	Code	Type
+1	Camp Coordination / Management	CCM	global
+2	Early Recovery	ERY	global
+3	Education	EDU	global
+4	Emergency Shelter and NFI	SHL	global
+5	Emergency Telecommunications	TEL	global
+6	Food Security	FSC	global
+7	Health	HEA	global
+8	Logistics	LOG	global
+9	Nutrition	NUT	global
+10	Protection	PRO	global
+11	Water Sanitation Hygiene	WSH	global
+12	Protection - Child Protection	PRO-CPN	aor
+13	Protection - Gender-Based Violence	PRO-GBV	aor
+14	Protection - Housing, Land and Property	PRO-HLP	aor
+15	Protection - Mine Action	PRO-MIN	aor
+16	Multipurpose Cash	MPC	global
+26479	Multi-sector	MS	custom
+26480	Coordination and support services	CSS	custom
+26481	Other	OTH	custom
+26512	Agriculture	AGR	custom
+26513	COVID-19	COV19	custom
+26546	Protection - Human Trafficking & Smuggling	PRO-HTS	aor
 Function Description
 getPlanData(year, globalClusterId)
 
@@ -71,7 +75,7 @@ Output
 
 Returns a pandas DataFrame containing plan-level information
 
-Example columns include:
+Example columns
 
 planId
 
@@ -97,36 +101,20 @@ requirements
 
 funding
 
-Example Output
-
-The returned dataframe contains structured data per country/plan, including:
-
-General plan metadata (name, type, year)
-
-Geographic information (country name and ISO3)
-
-Key indicators:
-
-People in need
-
-People targeted
-
-Funding requirements and contributions
-
 Notebook Usage
 
 The notebook hpc_analysis_notebook.ipynb can be used to:
 
 Test the getPlanData function
 
-Explore the dataset interactively
+Explore and visualize the data
 
-Perform quick analysis and validation
+Perform quick analysis
 
 Notes
 
-The function relies on the HPC public API
+Data is retrieved from the HPC public API
 
-Data availability depends on the selected year and cluster
+Availability depends on the selected year and cluster
 
-Results are returned as a pandas DataFrame for easy analysis
+Output is structured for direct use in analysis workflows
