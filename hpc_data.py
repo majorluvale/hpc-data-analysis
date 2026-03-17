@@ -2,8 +2,37 @@ import requests
 import numpy as np
 import pandas as pd
 
-def getPlanData(year, globalClusterId):
-    """This function return planData by year. PlanData include planId,Country,iso,name,	planType,isReleased,planCostingType,inNeed,target,cumulativeReach,requirements,funding,cashTransferFunding for HLP only"""
+def getPlanData(year=2025, globalClusterId=14):
+    """
+    Retrieve plan data for a given year and global cluster.
+
+    This function returns a DataFrame containing plan-level information
+    filtered by the specified year and global cluster ID.
+
+    The resulting DataFrame includes the following columns:
+    - planId
+    - planYear
+    - countryName
+    - countryISO3
+    - planName
+    - planType
+    - isReleased
+    - planCostingType
+    - peopleInNeed
+    - peopleTargeted
+    - cumulativeReach
+    - requirements
+    - funding
+    - cashTransferFunding
+
+    :param int year: The plan year (e.g., 2021). Defaults to 2025.
+    :param int globalClusterId: The global cluster ID. Defaults to 14
+        (Housing, Land and Property Area of Responsibility).
+        Full list of IDs: https://api.hpc.tools/v1/public/global-cluster
+    :return: A DataFrame containing plan data for the specified year
+        and global cluster.
+    :rtype: pandas.DataFrame
+    """
     
     #Get Cluster info by Code
     try:
@@ -55,10 +84,10 @@ def getPlanData(year, globalClusterId):
         ]
     ]
     plans.rename(
-        columns={"planFocusCountry.name": "Country", "planFocusCountry.iso3": "iso3"},
+        columns={"planFocusCountry.name": "countryName", "planFocusCountry.iso3": "countryISO3", "name" : "planName"},
         inplace=True,
     )
-    print("Working on caseloads")
+
     caseloads = pd.json_normalize(data, record_path=["caseloads"], meta=["planId"])
 
     # Exploser la liste
@@ -86,14 +115,12 @@ def getPlanData(year, globalClusterId):
         "measurements",
     ]
     df.drop(todelete, axis=1, inplace=True)
-    # df = df[['planId', 'planYear', 'planType', 'shortName','planType', 'inNeed', 'target', 'cumulativeReach', 'isReleased']]
-    # df.rename(columns={'shortName': 'country'}, inplace=True)
+
     df.inNeed = pd.to_numeric(df["inNeed"], errors="coerce")
     df.target = pd.to_numeric(df["target"], errors="coerce")
     df.cumulativeReach = pd.to_numeric(df["cumulativeReach"], errors="coerce")
 
     # Ajout des détails de financement
-    print("Working on requirements funding")
     requirements = [
         p
         for p in data
@@ -106,7 +133,7 @@ def getPlanData(year, globalClusterId):
         record_path=["financialData", "requirements", "breakdown", "byGlobalCluster"],
     )
     Req = Req[Req.globalClusterId == globalClusterId]
-    print("Working on funding data")
+
     funded = pd.json_normalize(
         data,
         meta=["planId"],
@@ -120,27 +147,32 @@ def getPlanData(year, globalClusterId):
     df.fillna(0, inplace=True)
 
     df = df.merge(plans, on="planId", how="left")
+    #Rename the added columns
+    df.rename(
+        columns = {"inNeed": "peopleInNeed", "target": "peopleTargeted", "cumulativeReach": "peopleReached", "requirements": "requiredFunds", "funding":"fundedAmount"},
+        inplace = True
+    )
+    
     df = df[
         [
             "planId",
             "planYear",
-            "Country",
-            "iso3",
-            "name",
+            "countryName",
+            "countryISO3",
+            "planName",
             "planType",
             "isReleased",
             "planCostingType",
-            "inNeed",
-            "target",
-            "cumulativeReach",
-            "requirements",
-            "funding",
+            "peopleInNeed",
+            "peopleTargeted",
+            "peopleReached",
+            "requiredFunds",
+            "fundedAmount",
             "cashTransferFunding",
         ]
     ]
     print("All done!")
     return df
-
 
 
 def getGlobalClusterInfoByCode(globalClusterCode):
@@ -165,3 +197,14 @@ def getGlobalClusterInfoByCode(globalClusterCode):
     
 
     return code, nomcluster
+
+
+if __name__ == "__main__":
+    year = int(input("Please enter a year between 2019 and 2025: "))
+    clustercode = int(input("Please enter a global cluster code: "))
+    df = getPlanData(year, clustercode)
+
+    filename = input("Please specify the name of the file: ")
+    df.to_excel(filename + ".xlsx")
+    print("All done, last five rows printed bellow!")
+    print(df.head())
