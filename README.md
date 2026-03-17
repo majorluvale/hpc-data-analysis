@@ -39,6 +39,28 @@ df.head()
 ```
 ![df.head() screenshot](df_head.png "d.head() screenshot")
 
+It is also possible to fetch data for multiple years and loop through them.
+e.g.:
+
+```
+YEARS = [2019, 2020, 2021, 2022, 2023, 2024, 2025]
+GLOBAL_CLUSTER_ID = 14  # Example: HLP
+
+dataframes = []
+for year in YEARS:
+    print("Working on", year)
+    dataframes.append(getPlanData(year))
+
+df = pd.concat(dataframes)
+
+print("It's done, thank you")
+df.head()
+```
+
+You can also save the DataFrame in Excel format:
+
+`df.to_excel("planDataHLP2019-2025.xlsx")` will save the dataframe to excel
+
 ### Parameters
 
 * ``PLAN_YEAR``: Year of the HPC plan (e.g., 2025)
