@@ -7,10 +7,10 @@ The core functionality is implemented in hpc_data.py, while a Jupyter notebook i
 
 ## Project Structure
 
-`hpc_data.py`
+* `hpc_data.py`
 Contains the main function getPlanData used to fetch and structure HPC data.
 
-hpc_analysis_notebook.ipynb
+* `hpc_analysis_notebook.ipynb`
 A Jupyter notebook used to test the function and explore the returned data.
 
 Requirements
