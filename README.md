@@ -37,7 +37,7 @@ GLOBAL_CLUSTER_ID = 13  # Example: GBV
 df = getPlanData(PLAN_YEAR, GLOBAL_CLUSTER_ID)
 df.head()
 ```
-(df_head.png)
+![df.head() screenshot](df_head.png "d.head() screenshot")
 Parameters
 
 PLAN_YEAR: Year of the HPC plan (e.g., 2025)
