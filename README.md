@@ -13,16 +13,22 @@ Contains the main function getPlanData used to fetch and structure HPC data.
 * `hpc_analysis_notebook.ipynb`
 A Jupyter notebook used to test the function and explore the returned data.
 
-Requirements
+## Requirements
 
 Install dependencies using:
 
+```
 pip install -r requirements.txt
+```
 
 Or manually:
 
+```
 pip install requests numpy pandas openpyxl matplotlib seaborn plotly nbformat>=4.2.0
-Usage
+```
+
+## Usage
+```
 from hpc_data import getPlanData
 
 PLAN_YEAR = 2025
@@ -30,10 +36,10 @@ GLOBAL_CLUSTER_ID = 13  # Example: GBV
 
 df = getPlanData(PLAN_YEAR, GLOBAL_CLUSTER_ID)
 df.head()
+```
 Parameters
 
 PLAN_YEAR: Year of the HPC plan (e.g., 2025)
-
 GLOBAL_CLUSTER_ID: Global cluster identifier (see table below)
 
 Global Cluster IDs
