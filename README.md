@@ -1,13 +1,13 @@
-#HPC Plan Data Extraction
-Overview
+# HPC Plan Data Extraction
+## Overview
 
 This project provides a simple way to extract Humanitarian Programme Cycle (HPC) plan data using a Python function. It allows users to retrieve structured plan-level information for a given year and global cluster.
 
 The core functionality is implemented in hpc_data.py, while a Jupyter notebook is provided for testing and exploration.
 
-Project Structure
+## Project Structure
 
-hpc_data.py
+`hpc_data.py`
 Contains the main function getPlanData used to fetch and structure HPC data.
 
 hpc_analysis_notebook.ipynb
