@@ -2,3 +2,8 @@ requests
 numpy
 pandas
 openpyxl
+matplotlib
+seaborn
+matplotlib
+plotly
+nbformat>=4.2.0

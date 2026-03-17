@@ -2,6 +2,7 @@ import requests
 import numpy as np
 import pandas as pd
 
+
 def getPlanData(year=2025, globalClusterId=14):
     """
     Retrieve plan data for a given year and global cluster.
@@ -33,27 +34,27 @@ def getPlanData(year=2025, globalClusterId=14):
         and global cluster.
     :rtype: pandas.DataFrame
     """
-    
-    #Get Cluster info by Code
+
+    # Get Cluster info by Code
     try:
         code, clustername = getGlobalClusterInfoByCode(globalClusterId)
         if code is not None and clustername is not None:
-            print(f'Cluster code: {code}, Cluster name: {clustername}')
+            print(f"Cluster code: {code}, Cluster name: {clustername}")
         else:
             return
     except TypeError as e:
         print("The Global cluster code is incorrect!", e)
         return
-    
+
     try:
         year = int(year)
-        assert year >= 2019  and year <= 2026, "The year must be an integer between 2019 and 2026"
+        assert (
+            year >= 2019 and year <= 2026
+        ), "The year must be an integer between 2019 and 2026"
     except AssertionError as e:
         print("An error occured! ", e)
         return
-        
 
-    
     url = "https://api.hpc.tools/v2/public/planSummary"
     params = {
         "year": year,
@@ -66,7 +67,7 @@ def getPlanData(year=2025, globalClusterId=14):
     try:
         r = requests.get(url, params=params)
         data = r.json()["data"]["planData"]
-    
+
     except requests.exceptions.ConnectionError as conErr:
         print("The connection was not succefull! ", conErr)
         return
@@ -84,14 +85,17 @@ def getPlanData(year=2025, globalClusterId=14):
         ]
     ]
     plans.rename(
-        columns={"planFocusCountry.name": "countryName", "planFocusCountry.iso3": "countryISO3", "name" : "planName"},
+        columns={
+            "planFocusCountry.name": "countryName",
+            "planFocusCountry.iso3": "countryISO3",
+            "name": "planName",
+        },
         inplace=True,
     )
 
     caseloads = pd.json_normalize(data, record_path=["caseloads"], meta=["planId"])
 
     # Exploser la liste
-    print("Extracting reached People")
     cumilativeReach = caseloads.explode("measurements")
     cumilativeReach["measurements"] = cumilativeReach["measurements"].apply(
         lambda x: {} if pd.isna(x) else x
@@ -147,12 +151,18 @@ def getPlanData(year=2025, globalClusterId=14):
     df.fillna(0, inplace=True)
 
     df = df.merge(plans, on="planId", how="left")
-    #Rename the added columns
+    # Rename the added columns
     df.rename(
-        columns = {"inNeed": "peopleInNeed", "target": "peopleTargeted", "cumulativeReach": "peopleReached", "requirements": "requiredFunds", "funding":"fundedAmount"},
-        inplace = True
+        columns={
+            "inNeed": "peopleInNeed",
+            "target": "peopleTargeted",
+            "cumulativeReach": "peopleReached",
+            "requirements": "requiredFunds",
+            "funding": "fundedAmount",
+        },
+        inplace=True,
     )
-    
+
     df = df[
         [
             "planId",
@@ -178,23 +188,27 @@ def getPlanData(year=2025, globalClusterId=14):
 def getGlobalClusterInfoByCode(globalClusterCode):
     url = "https://api.hpc.tools/v1/public/global-cluster"
     try:
-        resp = requests.get(url).json()['data']
-    
+        resp = requests.get(url).json()["data"]
+
     except requests.exceptions.ConnectionError as errt:
         print("The connection was not successfull", errt)
         return
-    
-    
-    try:
-        code = next((item['code'] for item in resp if item['id'] == globalClusterCode), None)
-        nomcluster = next((item['name'] for item in resp if item['id'] == globalClusterCode), None)
 
-        assert code is not None and nomcluster is not None, "The enterred Global cluster code is inccorrect"
+    try:
+        code = next(
+            (item["code"] for item in resp if item["id"] == globalClusterCode), None
+        )
+        nomcluster = next(
+            (item["name"] for item in resp if item["id"] == globalClusterCode), None
+        )
+
+        assert (
+            code is not None and nomcluster is not None
+        ), "The enterred Global cluster code is inccorrect"
 
     except AssertionError as e:
         print("An error occured! ", e)
         return
-    
 
     return code, nomcluster
 
