@@ -108,19 +108,19 @@ Fetches plan-level HPC data for a given year and global cluster.
 
 ### Returned columns
 
-* `planId`: * *Plan ID* * 
-* `planYear`: * *Plan year, eg.2021* * 
-* `countryName`: * *Name of the country, eg. Democratic Republic of Congo* *
-* `countryISO3`: * *Country's ISO3 code, eg. COD* * 
-* `planName`: * *The name of the plan. eg. Mozambique humanitarian response plan* *
-* `planType`: * *Type of plan* *
-* `isReleased`: * *Is the plan released? show False is the plan is not released* *
-* `peopleInNeed`: * *People in Need, see the IASC definition* *
-* `peopleTargeted`: * *People targeted, see the IASC definition* *
-* `peopleReached`: * *People reached, see the IASC definition* *
-* `requiredFunds`: * *Required funds* *
-* `fundedAmount`: * *Funded amount (in USD)* * 
-* `cashTransferFunding`: * *Funded amount for cash transfer only* *
+* `planId`: *Plan ID*
+* `planYear`: *Plan year, eg.2021*
+* `countryName`: *Name of the country, eg. Democratic Republic of Congo*
+* `countryISO3`: *Country's ISO3 code, eg. COD*
+* `planName`: *The name of the plan. eg. Mozambique humanitarian response plan*
+* `planType`: *Type of plan*
+* `isReleased`: *Is the plan released? show False is the plan is not released*
+* `peopleInNeed`: *People in Need, see the IASC definition*
+* `peopleTargeted`: *People targeted, see the IASC definition*
+* `peopleReached`: *People reached, see the IASC definition*
+* `requiredFunds`: *Required funds*
+* `fundedAmount`: *Funded amount (in USD)*
+* `cashTransferFunding`: *Funded amount for cash transfer only*
 
 ### Notebook Usage
 
